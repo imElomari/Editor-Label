@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Compressed Data Mapping Schema",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "a": { "type": "string", "description": "name" },
+      "b": { "type": "string", "description": "notes" },
+      "c": {
+        "type": "object",
+        "description": "layers",
+        "patternProperties": {
+          "^(d|ca_[A-Za-z0-9]+)$": {
+            "type": "object",
+            "properties": {
+              "e": {
+                "type": "object",
+                "description": "type",
+                "properties": {
+                  "f": {
+                    "type": "string",
+                    "a": ["RootLayer", "TextLayer", "ShapeLayer", "FrameLayer", "ImageLayer", "GroupLayer"]
+                  }
+                },
+                "required": ["f"]
+              },
+              "g": {
+                "type": "object",
+                "description": "props",
+                "properties": {
+                  "h": {
+                    "type": "object",
+                    "description": "boxSize",
+                    "properties": {
+                      "i": { "type": ["number", "string"], "description": "width" },
+                      "j": { "type": ["number", "string"], "description": "height" },
+                      "l": { "type": "number", "description": "x" },
+                      "m": { "type": "number", "description": "y" }
+                    },
+                    "required": ["i", "j"]
+                  },
+                  "k": {
+                    "type": "object",
+                    "description": "position",
+                    "properties": {
+                      "l": { "type": "number", "description": "x" },
+                      "m": { "type": "number", "description": "y" }
+                    },
+                    "required": ["l", "m"]
+                  },
+                  "n": { "type": "number", "description": "rotate" },
+                  "o": { "type": "string", "description": "color" },
+                  "p": { "type": ["object", "null"], "description": "image" },
+                  "q": { "type": ["object", "null"], "description": "gradientBackground" },
+                  "u": { "type": "number", "description": "scale" },
+                  "v": { "type": "string", "description": "text" },
+                  "ag": { "type": "number", "description": "transparency" },
+                  "ah": { "type": "string", "description": "clipPath" },
+                  "ai": {
+                    "type": "object",
+                    "description": "shapeSize",
+                    "properties": {
+                      "i": { "type": ["number", "string"], "description": "width" },
+                      "j": { "type": ["number", "string"], "description": "height" }
+                    },
+                    "required": ["i", "j"]
+                  },
+                  "an": {
+                    "type": "object",
+                    "description": "border",
+                    "properties": {
+                      "z": { "type": "string", "description": "style" },
+                      "ao": { "type": "number", "description": "weight" },
+                      "o": { "type": "string", "description": "color" }
+                    },
+                    "required": ["z", "ao", "o"]
+                  }
+                }
+              },
+              "r": { "type": "boolean", "description": "locked" },
+              "s": { 
+                "type": "array",
+                "description": "child",
+                "items": { "type": "string", "pattern": "^ca_[A-Za-z0-9]+$" }
+              },
+              "t": { 
+                "type": ["string", "null"],
+                "description": "parent",
+                "pattern": "^(ROOT|ca_[A-Za-z0-9]+)$"
+              }
+            },
+            "required": ["e", "g", "r", "s", "t"]
+          }
+        },
+        "required": ["d"]
+      }
+    },
+    "required": ["a", "b", "c"]
+  }
+}

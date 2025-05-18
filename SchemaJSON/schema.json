@@ -1,0 +1,194 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Principal Schema",
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "notes": { "type": "string" },
+        "layers": {
+          "type": "object",
+          "properties": {
+            "ROOT": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "object",
+                  "properties": {
+                    "resolvedName": { "const": "RootLayer" }
+                  },
+                  "required": ["resolvedName"]
+                },
+                "props": {
+                  "type": "object",
+                  "properties": {
+                    "boxSize": {
+                      "type": "object",
+                      "properties": {
+                        "width": { "type": "number" },
+                        "height": { "type": "number" }
+                      },
+                      "required": ["width", "height"]
+                    },
+                    "position": {
+                      "type": "object",
+                      "properties": {
+                        "x": { "type": "number" },
+                        "y": { "type": "number" }
+                      },
+                      "required": ["x", "y"]
+                    },
+                    "rotate": { "type": "number" },
+                    "color": { "type": "string" },
+                    "image": {
+                      "type": ["object", "null"],
+                      "properties": {
+                        "url": { "type": "string" },
+                        "thumb": { "type": "string" },
+                        "boxSize": {
+                          "type": "object",
+                          "properties": {
+                            "width": { "type": "number" },
+                            "height": { "type": "number" }
+                          },
+                          "required": ["width", "height"]
+                        },
+                        "position": {
+                          "type": "object",
+                          "properties": {
+                            "x": { "type": "number" },
+                            "y": { "type": "number" }
+                          },
+                          "required": ["x", "y"]
+                        },
+                        "rotate": { "type": "number" }
+                      }
+                    },
+                    "gradientBackground": {
+                      "type": ["object", "null"],
+                      "properties": {
+                        "colors": {
+                          "type": "array",
+                          "items": { "type": "string" }
+                        },
+                        "style": {
+                          "type": "string",
+                          "enum": [
+                            "leftToRight",
+                            "topToBottom",
+                            "topLeftToBottomRight",
+                            "circleCenter",
+                            "circleTopLeft"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "required": ["boxSize", "position", "rotate"]
+                },
+                "locked": { "type": "boolean" },
+                "child": {
+                  "type": "array",
+                  "items": { "type": "string", "pattern": "^ca_[A-Za-z0-9]+$" }
+                },
+                "parent": { "type": ["null"] }
+              },
+              "required": ["type", "props", "locked", "child", "parent"]
+            }
+          },
+          "patternProperties": {
+            "^ca_[A-Za-z0-9]+$": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "object",
+                  "properties": {
+                    "resolvedName": {
+                      "type": "string",
+                      "enum": ["TextLayer", "ShapeLayer", "FrameLayer", "ImageLayer", "GroupLayer"]
+                    }
+                  },
+                  "required": ["resolvedName"]
+                },
+                "props": {
+                  "type": "object",
+                  "properties": {
+                    "position": {
+                      "type": "object",
+                      "properties": {
+                        "x": { "type": "number" },
+                        "y": { "type": "number" }
+                      },
+                      "required": ["x", "y"]
+                    },
+                    "boxSize": {
+                      "type": "object",
+                      "properties": {
+                        "width": { "type": "number" },
+                        "height": { "type": "number" },
+                        "x": { "type": "number" },
+                        "y": { "type": "number" }
+                      },
+                      "required": ["width", "height"]
+                    },
+                    "rotate": { "type": "number" },
+                    "scale": { "type": "number" },
+                    "transparency": { "type": "number" },
+                    "text": { "type": "string" },
+                    "color": { "type": "string" },
+                    "clipPath": { "type": "string" },
+                    "fonts": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "family": { "type": "string" },
+                          "name": { "type": "string" },
+                          "url": { "type": "string" },
+                          "style": { "type": "string" }
+                        }
+                      }
+                    },
+                    "colors": {
+                      "type": "array",
+                      "items": { "type": "string" }
+                    },
+                    "fontSizes": {
+                      "type": "array",
+                    "items": { "type": "number" }
+                    },
+                    "effect": {
+                      "type": ["object", "null"],
+                      "properties": {
+                        "name": { "type": "string" },
+                        "settings": {
+                          "type": "object",
+                          "properties": {
+                            "offset": { "type": "number" },
+                            "direction": { "type": "number" },
+                            "color": { "type": "string" }
+                          }
+                        }
+                      }
+                    },
+                    "gradientBackground": { "type": ["object", "null"] }
+                  },
+                  "required": ["position", "boxSize", "rotate"]
+                },
+                "locked": { "type": "boolean" },
+                "child": { "type": "array", "items": { "type": "string" } },
+                "parent": { 
+                  "type": "string",
+                  "pattern": "^(ROOT|ca_[A-Za-z0-9]+)$"
+                }
+              },
+              "required": ["type", "props", "locked", "child", "parent"]
+            }
+          },
+          "required": ["ROOT"]
+        }
+      },
+      "required": ["name", "notes", "layers"]
+    }
+  }
