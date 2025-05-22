@@ -42,6 +42,12 @@ function LayerSettings({ layer }: { layer: any }) {
     actions.setSettingsOpen(false)
   }
 
+  // Ensure we have default values for all properties
+  const position = layer.boxData?.position || { x: 0, y: 0 }
+  const boxSize = layer.boxData?.boxSize || { width: 100, height: 100 }
+  const rotate = layer.boxData?.rotate || 0
+  const opacity = layer.opacity ?? 1
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -61,10 +67,13 @@ function LayerSettings({ layer }: { layer: any }) {
               <Label className="text-xs text-muted-foreground">X</Label>
               <Input
                 type="number"
-                value={layer.position.x}
+                value={position.x}
                 onChange={(e) =>
                   updateLayer({
-                    position: { ...layer.position, x: Number(e.target.value) },
+                    boxData: {
+                      ...(layer.boxData || {}),
+                      position: { ...position, x: Number(e.target.value) },
+                    },
                   })
                 }
               />
@@ -73,10 +82,13 @@ function LayerSettings({ layer }: { layer: any }) {
               <Label className="text-xs text-muted-foreground">Y</Label>
               <Input
                 type="number"
-                value={layer.position.y}
+                value={position.y}
                 onChange={(e) =>
                   updateLayer({
-                    position: { ...layer.position, y: Number(e.target.value) },
+                    boxData: {
+                      ...(layer.boxData || {}),
+                      position: { ...position, y: Number(e.target.value) },
+                    },
                   })
                 }
               />
@@ -91,10 +103,13 @@ function LayerSettings({ layer }: { layer: any }) {
               <Label className="text-xs text-muted-foreground">Width</Label>
               <Input
                 type="number"
-                value={layer.boxSize.width}
+                value={boxSize.width}
                 onChange={(e) =>
                   updateLayer({
-                    boxSize: { ...layer.boxSize, width: Number(e.target.value) },
+                    boxData: {
+                      ...(layer.boxData || {}),
+                      boxSize: { ...boxSize, width: Number(e.target.value) },
+                    },
                   })
                 }
               />
@@ -103,10 +118,13 @@ function LayerSettings({ layer }: { layer: any }) {
               <Label className="text-xs text-muted-foreground">Height</Label>
               <Input
                 type="number"
-                value={layer.boxSize.height}
+                value={boxSize.height}
                 onChange={(e) =>
                   updateLayer({
-                    boxSize: { ...layer.boxSize, height: Number(e.target.value) },
+                    boxData: {
+                      ...(layer.boxData || {}),
+                      boxSize: { ...boxSize, height: Number(e.target.value) },
+                    },
                   })
                 }
               />
@@ -115,20 +133,27 @@ function LayerSettings({ layer }: { layer: any }) {
         </div>
 
         <div className="space-y-2">
-          <Label>Rotation ({Math.round(layer.rotate)}°)</Label>
+          <Label>Rotation ({Math.round(rotate)}°)</Label>
           <Slider
-            value={[layer.rotate]}
+            value={[rotate]}
             min={0}
             max={360}
             step={1}
-            onValueChange={(value) => updateLayer({ rotate: value[0] })}
+            onValueChange={(value) =>
+              updateLayer({
+                boxData: {
+                  ...(layer.boxData || {}),
+                  rotate: value[0],
+                },
+              })
+            }
           />
         </div>
 
         <div className="space-y-2">
-          <Label>Opacity ({Math.round(layer.opacity * 100)}%)</Label>
+          <Label>Opacity ({Math.round(opacity * 100)}%)</Label>
           <Slider
-            value={[layer.opacity * 100]}
+            value={[opacity * 100]}
             min={0}
             max={100}
             step={1}
@@ -141,10 +166,10 @@ function LayerSettings({ layer }: { layer: any }) {
             <div className="space-y-2">
               <Label>Text</Label>
               <Input
-                value={layer.props.text}
+                value={layer.props?.text || ""}
                 onChange={(e) =>
                   updateLayer({
-                    props: { ...layer.props, text: e.target.value },
+                    props: { ...(layer.props || {}), text: e.target.value },
                   })
                 }
               />
@@ -154,10 +179,10 @@ function LayerSettings({ layer }: { layer: any }) {
               <Label>Font Size</Label>
               <Input
                 type="number"
-                value={layer.props.fontSize}
+                value={layer.props?.fontSize || 16}
                 onChange={(e) =>
                   updateLayer({
-                    props: { ...layer.props, fontSize: Number(e.target.value) },
+                    props: { ...(layer.props || {}), fontSize: Number(e.target.value) },
                   })
                 }
               />
@@ -166,10 +191,10 @@ function LayerSettings({ layer }: { layer: any }) {
             <div className="space-y-2">
               <Label>Text Align</Label>
               <Select
-                value={layer.props.textAlign || "left"}
+                value={layer.props?.textAlign || "left"}
                 onValueChange={(value) =>
                   updateLayer({
-                    props: { ...layer.props, textAlign: value },
+                    props: { ...(layer.props || {}), textAlign: value },
                   })
                 }
               >
@@ -189,13 +214,13 @@ function LayerSettings({ layer }: { layer: any }) {
               <div className="flex items-center gap-2">
                 <div
                   className="w-8 h-8 rounded-full border"
-                  style={{ backgroundColor: layer.props.color || "#000000" }}
+                  style={{ backgroundColor: layer.props?.color || "#000000" }}
                 />
                 <Input
-                  value={layer.props.color || "#000000"}
+                  value={layer.props?.color || "#000000"}
                   onChange={(e) =>
                     updateLayer({
-                      props: { ...layer.props, color: e.target.value },
+                      props: { ...(layer.props || {}), color: e.target.value },
                     })
                   }
                 />
@@ -210,13 +235,13 @@ function LayerSettings({ layer }: { layer: any }) {
             <div className="flex items-center gap-2">
               <div
                 className="w-8 h-8 rounded-full border"
-                style={{ backgroundColor: layer.props.color || "#4f46e5" }}
+                style={{ backgroundColor: layer.props?.color || "#4f46e5" }}
               />
               <Input
-                value={layer.props.color || "#4f46e5"}
+                value={layer.props?.color || "#4f46e5"}
                 onChange={(e) =>
                   updateLayer({
-                    props: { ...layer.props, color: e.target.value },
+                    props: { ...(layer.props || {}), color: e.target.value },
                   })
                 }
               />
@@ -230,13 +255,13 @@ function LayerSettings({ layer }: { layer: any }) {
             <div className="flex items-center gap-2">
               <div
                 className="w-8 h-8 rounded-full border"
-                style={{ backgroundColor: layer.props.background || "#f3f4f6" }}
+                style={{ backgroundColor: layer.props?.background || "#f3f4f6" }}
               />
               <Input
-                value={layer.props.background || "#f3f4f6"}
+                value={layer.props?.background || "#f3f4f6"}
                 onChange={(e) =>
                   updateLayer({
-                    props: { ...layer.props, background: e.target.value },
+                    props: { ...(layer.props || {}), background: e.target.value },
                   })
                 }
               />
