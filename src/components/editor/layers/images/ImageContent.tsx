@@ -1,6 +1,7 @@
-import { LayerComponentProps, Delta, BoxSize } from "@/types";
+import { Delta, BoxSize } from "@/types";
 import { FC } from "react";
-import { getTransformStyle } from "../../../utils/getTransformStyle";
+import { getTransformStyle } from "../../../../utils/getTransformStyle";
+import { LayerComponentProps } from "@/types/layer";
 
 export interface ImageContentProps extends LayerComponentProps {
   url: string;

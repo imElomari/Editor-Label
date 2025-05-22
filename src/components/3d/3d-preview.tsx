@@ -9,30 +9,34 @@ import {
   Html,
   useGLTF,
 } from "@react-three/drei";
-import { MousePointerClick, MouseIcon, Move } from "lucide-react";
+import { MousePointerClick, MouseIcon } from "lucide-react";
+import * as THREE from "three";
 
 function Model() {
-  const { nodes, materials } = useGLTF("/model.gltf");
+  const { nodes } = useGLTF("/model.gltf");
 
   return (
     <group position={[0, -1, 0]} rotation={[0, Math.PI, 0]} scale={0.5}>
-      {["can_250ml", "can_250ml_1", "can_250ml_2"].map((part, index) => (
-        <mesh
-          key={part}
-          geometry={nodes[part].geometry}
-          castShadow
-          receiveShadow
-        >
-          <meshPhysicalMaterial
-            color={index === 2 ? "#FFFFFF" : "#B8B8B8"}
-            metalness={index === 2 ? 0.1 : 0.9}
-            roughness={0.1}
-            envMapIntensity={1.5}
-            clearcoat={0.5}
-            clearcoatRoughness={0.1}
-          />
-        </mesh>
-      ))}
+      {["can_250ml", "can_250ml_1", "can_250ml_2"].map((part, index) => {
+        const meshNode = nodes[part] as THREE.Mesh;
+        return (
+          <mesh
+            key={part}
+            geometry={meshNode.geometry}
+            castShadow
+            receiveShadow
+          >
+            <meshPhysicalMaterial
+              color={index === 2 ? "#FFFFFF" : "#B8B8B8"}
+              metalness={index === 2 ? 0.1 : 0.9}
+              roughness={0.1}
+              envMapIntensity={1.5}
+              clearcoat={0.5}
+              clearcoatRoughness={0.1}
+            />
+          </mesh>
+        );
+      })}
     </group>
   );
 }
@@ -47,7 +51,6 @@ export function ThreeDPreview() {
             background={true}
             blur={0}
             resolution={1024}
-            intensity={2}
           />
           <Stage intensity={0.3} preset="rembrandt" adjustCamera={false}>
             <Model />
