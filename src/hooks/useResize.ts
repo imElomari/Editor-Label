@@ -4,14 +4,14 @@ import { useMemo } from "react"
 import { cloneDeep } from "lodash"
 import { useEditor } from "."
 import { getTransformStyle } from "@/utils/getTransformStyle"
-import { BoxData, BoxSize, Delta } from "@/types"
+import type { BoxData, BoxSize, Delta } from "@/types"
 import { angleBetweenPoints } from "@/utils/2d/angleBetwwenPoints"
 import { distanceBetweenPoints } from "@/utils/2d/distanceBetweenPoints"
 import { getPositionChangesBetweenTwoCorners } from "@/utils/2d/getPositionChangesBetweenTwoCorners"
 import { getSizeWithRatio } from "@/utils/2d/getSizeWithRatio"
 import { horizontalAndVerticalChange } from "@/utils/2d/horizontalAndVerticalChange"
 import { visualCorners } from "@/utils/2d/visualCorners"
-import { Direction } from "@/types/resize"
+import type { Direction } from "@/types/resize"
 
 export const useResize = (getData: () => BoxData) => {
   const frameScale = useEditor().state.scale
@@ -30,21 +30,34 @@ export const useResize = (getData: () => BoxData) => {
         const matrix = new WebKitCSSMatrix(getTransformStyle({ position, rotate }))
         const distance = distanceBetweenPoints(original, newPosition, frameScale)
         const change = horizontalAndVerticalChange(rotate, angleBetweenPoints(original, newPosition), distance)
+
+        // Calculate new size based on direction and change
         const newSize = getNewSize(boxSize, change, position, direction)
+
+        // Apply minimum size constraints
         const sizeWithLimit = {
           ...newSize,
           width: Math.max(MIN_WIDTH, newSize.width),
           height: Math.max(MIN_HEIGHT, newSize.height),
         }
+
+        // Apply aspect ratio lock if needed
         const newSizeWithLockAspect = getSizeWithRatio(sizeWithLimit, ratio, lockAspect)
+
+        // Calculate position changes based on corners
         const oldCorners = visualCorners(boxSize, matrix, position)
-        const newCorners = visualCorners(newSizeWithLockAspect, matrix, newSizeWithLockAspect)
+        const newCorners = visualCorners(newSizeWithLockAspect, matrix, position)
         const { changeX, changeY } = getPositionChangesBetweenTwoCorners(oldCorners, newCorners, direction)
+
         return {
-          boxSize: newSizeWithLockAspect,
+          boxSize: {
+            ...newSizeWithLockAspect,
+            width: newSizeWithLockAspect.x,
+            height: newSizeWithLockAspect.y,
+          },
           position: {
-            x: newSizeWithLockAspect.x - changeX,
-            y: newSizeWithLockAspect.y - changeY,
+            x: position.x - changeX,
+            y: position.y - changeY,
           },
           rotate,
           scale,
@@ -56,64 +69,47 @@ export const useResize = (getData: () => BoxData) => {
 }
 
 const getNewSize = (oldSize: BoxSize, change: BoxSize, position: Delta, direction: Direction) => {
+  // Create a copy to avoid mutation
+  const result = { ...oldSize, x: position.x, y: position.y }
+
   switch (direction) {
     case "top":
-      return {
-        x: position.x,
-        y: position.y + change.height,
-        width: oldSize.width,
-        height: oldSize.height - change.height,
-      }
+      result.y = position.y + change.height
+      result.height = Math.max(1, oldSize.height - change.height)
+      break
     case "bottom":
-      return {
-        x: position.x,
-        y: position.y,
-        width: oldSize.width,
-        height: oldSize.height + change.height,
-      }
+      result.height = Math.max(1, oldSize.height + change.height)
+      break
     case "left":
-      return {
-        x: position.x + change.width,
-        y: position.y,
-        width: oldSize.width - change.width,
-        height: oldSize.height,
-      }
+      result.x = position.x + change.width
+      result.width = Math.max(1, oldSize.width - change.width)
+      break
     case "right":
-      return {
-        x: position.x,
-        y: position.y,
-        width: oldSize.width + change.width,
-        height: oldSize.height,
-      }
+      result.width = Math.max(1, oldSize.width + change.width)
+      break
     case "topLeft":
-      return {
-        x: position.x + change.width,
-        y: position.y + change.height,
-        width: oldSize.width - change.width,
-        height: oldSize.height - change.height,
-      }
+      result.x = position.x + change.width
+      result.y = position.y + change.height
+      result.width = Math.max(1, oldSize.width - change.width)
+      result.height = Math.max(1, oldSize.height - change.height)
+      break
     case "bottomLeft":
-      return {
-        x: position.x + change.width,
-        y: position.y,
-        width: oldSize.width - change.width,
-        height: oldSize.height + change.height,
-      }
+      result.x = position.x + change.width
+      result.width = Math.max(1, oldSize.width - change.width)
+      result.height = Math.max(1, oldSize.height + change.height)
+      break
     case "bottomRight":
-      return {
-        x: position.x,
-        y: position.y,
-        width: oldSize.width + change.width,
-        height: oldSize.height + change.height,
-      }
-    default: //topRight
-      return {
-        x: position.x,
-        y: position.y + change.height,
-        width: oldSize.width + change.width,
-        height: oldSize.height - change.height,
-      }
+      result.width = Math.max(1, oldSize.width + change.width)
+      result.height = Math.max(1, oldSize.height + change.height)
+      break
+    case "topRight":
+      result.y = position.y + change.height
+      result.width = Math.max(1, oldSize.width + change.width)
+      result.height = Math.max(1, oldSize.height - change.height)
+      break
   }
+
+  return result
 }
 
 export const getImageSize = (
@@ -142,7 +138,7 @@ export const getImageSize = (
         res.image.position.x = 0
         const changeImageSize = change.width - Math.abs(image.position.x)
         res.image.boxSize.width += changeImageSize
-        res.image.boxSize.height += changeImageSize * imageRatio
+        res.image.boxSize.height += changeImageSize / imageRatio
       } else {
         res.image.position.x += change.width
       }
@@ -152,7 +148,7 @@ export const getImageSize = (
         //resize image
         const changeImageSize = change.width + box.boxSize.width - image.position.x - image.boxSize.width
         res.image.boxSize.width += changeImageSize
-        res.image.boxSize.height += changeImageSize * imageRatio
+        res.image.boxSize.height += changeImageSize / imageRatio
       }
     }
   }
@@ -164,7 +160,7 @@ export const getImageSize = (
         res.image.position.y = 0
         const changeImageSize = change.height - Math.abs(image.position.y)
         res.image.boxSize.height += changeImageSize
-        res.image.boxSize.width += changeImageSize / imageRatio
+        res.image.boxSize.width += changeImageSize * imageRatio
       } else {
         res.image.position.y += change.height
       }
@@ -174,72 +170,7 @@ export const getImageSize = (
         //resize image
         const changeImageSize = change.height + box.boxSize.height - image.position.y - image.boxSize.height
         res.image.boxSize.height += changeImageSize
-        res.image.boxSize.width += changeImageSize / imageRatio
-      }
-    }
-  }
-  return res
-}
-
-export const getVideoSize = (
-  box: BoxData,
-  video: BoxData,
-  direction: Direction,
-  change: { width: number; height: number },
-) => {
-  const res = cloneDeep({
-    boxSize: box.boxSize,
-    position: box.position,
-    rotate: box.rotate,
-    scale: box.scale,
-    image: {
-      boxSize: video.boxSize,
-      position: video.position,
-      rotate: video.rotate,
-    },
-  })
-  const imageRatio = video.boxSize.width / video.boxSize.height
-  if (change.width !== 0) {
-    res.boxSize.width += change.width
-    if (direction.toLowerCase().includes("left")) {
-      if (change.width > Math.abs(res.image.position.x)) {
-        //resize image
-        res.image.position.x = 0
-        const changeImageSize = change.width - Math.abs(video.position.x)
-        res.image.boxSize.width += changeImageSize
-        res.image.boxSize.height += changeImageSize * imageRatio
-      } else {
-        res.image.position.x += change.width
-      }
-    }
-    if (direction.toLowerCase().includes("right")) {
-      if (change.width + box.boxSize.width - video.position.x > video.boxSize.width) {
-        //resize image
-        const changeImageSize = change.width + box.boxSize.width - video.position.x - video.boxSize.width
-        res.image.boxSize.width += changeImageSize
-        res.image.boxSize.height += changeImageSize * imageRatio
-      }
-    }
-  }
-  if (change.height !== 0) {
-    res.boxSize.height += change.height
-    if (direction.toLowerCase().includes("top")) {
-      if (change.height > Math.abs(res.image.position.y)) {
-        //resize image
-        res.image.position.y = 0
-        const changeImageSize = change.height - Math.abs(video.position.y)
-        res.image.boxSize.height += changeImageSize
-        res.image.boxSize.width += changeImageSize / imageRatio
-      } else {
-        res.image.position.y += change.height
-      }
-    }
-    if (direction.toLowerCase().includes("bottom")) {
-      if (change.height + box.boxSize.height - video.position.y > video.boxSize.height) {
-        //resize image
-        const changeImageSize = change.height + box.boxSize.height - video.position.y - video.boxSize.height
-        res.image.boxSize.height += changeImageSize
-        res.image.boxSize.width += changeImageSize / imageRatio
+        res.image.boxSize.width += changeImageSize * imageRatio
       }
     }
   }
