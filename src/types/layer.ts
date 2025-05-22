@@ -27,6 +27,11 @@ export interface TextLayer extends LayerBase {
   fontFamily: string
   color: string
   textAlign: 'left' | 'center' | 'right'
+  styles?: {
+    bold?: boolean
+    italic?: boolean
+    underline?: boolean
+  }
 }
 
 export interface ImageLayer extends LayerBase {
@@ -39,6 +44,7 @@ export interface ImageLayer extends LayerBase {
 export interface ShapeLayer extends LayerBase {
   type: 'shape'
   shapeType: ShapeType
+  clipPath?: string
   color: string
   borderStyle?: ShapeBorderStyle
   borderWidth?: number
@@ -49,6 +55,7 @@ export interface FrameLayer extends LayerBase {
   type: 'frame'
   background: string | GradientStyle
   padding?: number
+  image?: string
 }
 
 // Union type for all layer types
