@@ -1,0 +1,40 @@
+{
+    "data": [
+        {
+            "desc": "Product Name",
+            "data": "{\"layers\":{\"text\":{\"type\":{\"resolvedName\":\"TextLayer\"},\"props\":{\"text\":\"<p style=\\\"text-align: center;font-family: 'Abril Fatface Regular';font-size: 32px;color: rgb(21, 51, 244);line-height: 1.4;letter-spacing: normal;\\\"><strong>PREMIUM</strong></p><p style=\\\"text-align: center;font-family: 'Abril Fatface Regular';font-size: 32px;color: rgb(21, 51, 244);line-height: 1.4;\\\"><strong>QUALITY</strong></p>\",\"fonts\":[{\"family\":\"Abril Fatface\"}],\"colors\":[\"rgb(21, 51, 244)\"],\"fontSizes\":[32]}}}}"
+        },
+        {
+            "desc": "Product Info",
+            "data": "{\"layers\":{\"text\":{\"type\":{\"resolvedName\":\"TextLayer\"},\"props\":{\"text\":\"<p style=\\\"text-align: center;font-family: 'Inter';font-size: 14px;color: rgb(88, 88, 88);line-height: 1.4;\\\">Net Weight: 500g</p><p style=\\\"text-align: center;font-family: 'Inter';font-size: 14px;color: rgb(88, 88, 88);line-height: 1.4;\\\">Best Before: See package</p>\",\"fonts\":[{\"family\":\"Inter\"}],\"colors\":[\"rgb(88, 88, 88)\"],\"fontSizes\":[14]}}}}"
+        },
+        {
+            "desc": "Ingredients",
+            "data": "{\"layers\":{\"text\":{\"type\":{\"resolvedName\":\"TextLayer\"},\"props\":{\"text\":\"<p style=\\\"text-align: left;font-family: 'Inter';font-size: 12px;color: rgb(51, 51, 51);line-height: 1.6;\\\">Ingredients:</p>\",\"fonts\":[{\"family\":\"Inter\"}],\"colors\":[\"rgb(51, 51, 51)\"],\"fontSizes\":[12]}}}}"
+        },
+        {
+            "desc": "Warning Text",
+            "data": "{\"layers\":{\"text\":{\"type\":{\"resolvedName\":\"TextLayer\"},\"props\":{\"text\":\"<p style=\\\"text-align: center;font-family: 'Inter';font-size: 14px;color: rgb(255, 59, 59);line-height: 1.4;\\\"><strong>Allergen Warning</strong></p>\",\"fonts\":[{\"family\":\"Inter\"}],\"colors\":[\"rgb(255, 59, 59)\"],\"fontSizes\":[14]}}}}"
+        },
+        {
+            "desc": "Brand Name",
+            "data": "{\"layers\":{\"text\":{\"type\":{\"resolvedName\":\"TextLayer\"},\"props\":{\"text\":\"<p style=\\\"text-align: center;font-family: 'Alfa Slab One';font-size: 45px;color: rgb(33, 33, 33);line-height: 1.2;\\\">BRAND</p>\",\"fonts\":[{\"family\":\"Alfa Slab One\"}],\"colors\":[\"rgb(33, 33, 33)\"],\"fontSizes\":[45]}}}}"
+        },
+        {
+            "desc": "Organic Badge",
+            "data": "{\"layers\":{\"text\":{\"type\":{\"resolvedName\":\"TextLayer\"},\"props\":{\"text\":\"<p style=\\\"text-align: center;font-family: 'Alatsi';font-size: 18px;color: rgb(67, 160, 71);line-height: 1.2;\\\"><strong>ORGANIC</strong></p>\",\"fonts\":[{\"family\":\"Alatsi\"}],\"colors\":[\"rgb(67, 160, 71)\"],\"fontSizes\":[18]}}}}"
+        },
+        {
+            "desc": "Storage Info",
+            "data": "{\"layers\":{\"text\":{\"type\":{\"resolvedName\":\"TextLayer\"},\"props\":{\"text\":\"<p style=\\\"text-align: center;font-family: 'Inter';font-size: 12px;color: rgb(97, 97, 97);\\\">Store in a cool, dry place</p>\",\"fonts\":[{\"family\":\"Inter\"}],\"colors\":[\"rgb(97, 97, 97)\"],\"fontSizes\":[12]}}}}"
+        },
+        {
+            "desc": "Made In",
+            "data": "{\"layers\":{\"text\":{\"type\":{\"resolvedName\":\"TextLayer\"},\"props\":{\"text\":\"<p style=\\\"text-align: center;font-family: 'Inter';font-size: 12px;color: rgb(97, 97, 97);\\\">Made in Morocco</p>\",\"fonts\":[{\"family\":\"Inter\"}],\"colors\":[\"rgb(97, 97, 97)\"],\"fontSizes\":[12]}}}}"
+        },
+        {
+            "desc": "Contact",
+            "data": "{\"layers\":{\"text\":{\"type\":{\"resolvedName\":\"TextLayer\"},\"props\":{\"text\":\"<p style=\\\"text-align: center;font-family: 'Inter';font-size: 11px;color: rgb(97, 97, 97);\\\">www.yourcompany.com</p>\",\"fonts\":[{\"family\":\"Inter\"}],\"colors\":[\"rgb(97, 97, 97)\"],\"fontSizes\":[11]}}}}"
+        }
+    ]
+}

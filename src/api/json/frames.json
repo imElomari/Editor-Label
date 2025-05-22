@@ -1,0 +1,32 @@
+{
+  "data": [
+    {
+      "img": "api/images/frames/circle/001.png",
+      "background": "#f3f4f6",
+      "width": "300",
+      "height": "200",
+      "desc": "Simple Frame"
+    },
+    {
+      "img": "/images/frames/circle/002.png",
+      "background": "#f0f9ff",
+      "width": "300",
+      "height": "200",
+      "desc": "Rounded Frame"
+    },
+    {
+      "img": "/images/frames/circle/003.png",
+      "background": "#f0fdf4",
+      "width": "300",
+      "height": "200",
+      "desc": "Double Border"
+    },
+    {
+      "img": "/images/frames/circle/004.png",
+      "background": "#fef2f2",
+      "width": "300",
+      "height": "200",
+      "desc": "Decorative Frame"
+    }
+  ]
+}
