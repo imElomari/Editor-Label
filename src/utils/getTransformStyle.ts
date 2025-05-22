@@ -1,4 +1,4 @@
-import { LayerComponentProps } from "@/types";
+import { LayerComponentProps } from "@/types/layer";
 
 export const getTransformStyle = (props: Partial<LayerComponentProps & { rotate: number }>) => {
     const res: string[] = [];
